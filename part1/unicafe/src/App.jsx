@@ -1,5 +1,17 @@
 import { useState } from 'react';
 
+function Button({ onClick, text }) {
+  return <button onClick={onClick}>{text}</button>;
+}
+
+function StatisticLine({ text, value }) {
+  return (
+    <p>
+      {text} {value}
+    </p>
+  );
+}
+
 function Statistics({ good, neutral, bad }) {
   const all = good + neutral + bad;
   const average = (good * 1 + neutral * 0 + bad * -1) / all;
@@ -11,12 +23,12 @@ function Statistics({ good, neutral, bad }) {
 
   return (
     <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>all {all}</p>
-      <p>average {average || 0}</p>
-      <p>positive {positive || 0}%</p>
+      <StatisticLine text="good" value={good} />
+      <StatisticLine text="neutral" value={neutral} />
+      <StatisticLine text="bad" value={bad} />
+      <StatisticLine text="all" value={all} />
+      <StatisticLine text="average" value={average} />
+      <StatisticLine text="positive" value={`${positive}%`} />
     </div>
   );
 }
@@ -31,9 +43,9 @@ function App() {
       <div>
         <h2>give feedback</h2>
         <div>
-          <button onClick={() => setGood(good + 1)}>good</button>
-          <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
-          <button onClick={() => setBad(bad + 1)}>bad</button>
+          <Button onClick={() => setGood(good + 1)} text="good" />
+          <Button onClick={() => setNeutral(neutral + 1)} text="neutral" />
+          <Button onClick={() => setBad(bad + 1)} text="bad" />
         </div>
       </div>
       <div>
