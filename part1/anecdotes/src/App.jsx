@@ -15,6 +15,14 @@ function App() {
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(new Uint8Array(anecdotes.length));
 
+  let mostVotes = votes[0];
+  for (let i = 0; i < votes.length; i++) {
+    if (votes[i] > mostVotes) {
+      mostVotes = votes[i];
+    }
+  }
+  const mostVotesIndex = votes.findIndex((vote) => vote === mostVotes);
+
   function increaseAnecdoteVote() {
     const newVotes = [...votes];
     newVotes[selected] += 1;
@@ -28,10 +36,18 @@ function App() {
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <p>has {votes[selected]} votes</p>
-      <button onClick={increaseAnecdoteVote}>vote</button>
-      <button onClick={handleNextAnecdoteClick}>next anecdote</button>
+      <div>
+        <h2>Anecdote of the day</h2>
+        <p>{anecdotes[selected]}</p>
+        <p>has {votes[selected]} votes</p>
+        <button onClick={increaseAnecdoteVote}>vote</button>
+        <button onClick={handleNextAnecdoteClick}>next anecdote</button>
+      </div>
+      <div>
+        <h2>Anecdote with most votes</h2>
+        <p>{anecdotes[mostVotesIndex]}</p>
+        <p>has {votes[mostVotesIndex]} votes</p>
+      </div>
     </div>
   );
 }
