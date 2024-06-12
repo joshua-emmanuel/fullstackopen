@@ -13,6 +13,13 @@ function App() {
   ];
 
   const [selected, setSelected] = useState(0);
+  const [votes, setVotes] = useState(new Uint8Array(anecdotes.length));
+
+  function increaseAnecdoteVote() {
+    const newVotes = [...votes];
+    newVotes[selected] += 1;
+    setVotes(newVotes);
+  }
 
   function handleNextAnecdoteClick() {
     const randomAnecdoteIndex = Math.floor(Math.random() * anecdotes.length);
@@ -22,6 +29,8 @@ function App() {
   return (
     <div>
       <p>{anecdotes[selected]}</p>
+      <p>has {votes[selected]} votes</p>
+      <button onClick={increaseAnecdoteVote}>vote</button>
       <button onClick={handleNextAnecdoteClick}>next anecdote</button>
     </div>
   );
