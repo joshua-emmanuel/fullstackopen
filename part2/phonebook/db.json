@@ -19,6 +19,21 @@
       "name": "Mary Poppendieck",
       "number": "39-23-6423122",
       "id": "4"
+    },
+    {
+      "id": "5",
+      "name": "Enola Holmes",
+      "number": "224-342-225"
+    },
+    {
+      "id": "6",
+      "name": "Adolf Hitler",
+      "number": "123-445-098"
+    },
+    {
+      "id": "7",
+      "name": "Mary Poppins",
+      "number": "215-735-990"
     }
   ]
 }
