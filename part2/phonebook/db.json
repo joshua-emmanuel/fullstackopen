@@ -26,14 +26,24 @@
       "number": "224-342-225"
     },
     {
-      "id": "6",
       "name": "Adolf Hitler",
-      "number": "123-445-098"
+      "number": "98012",
+      "id": "6"
     },
     {
       "id": "7",
       "name": "Mary Poppins",
       "number": "215-735-990"
+    },
+    {
+      "name": "Caleb Amuro",
+      "number": "(2)-123-456-789",
+      "id": "332e"
+    },
+    {
+      "id": "807a",
+      "name": "Israel Lijadu",
+      "number": "3942044932"
     }
   ]
 }

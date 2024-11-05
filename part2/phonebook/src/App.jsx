@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 import { useState, useEffect } from "react";
 import SearchFilter from "./components/SearchFilter";
 import PersonForm from "./components/PersonForm";
@@ -25,18 +25,35 @@ const App = () => {
       alert("Please make sure all fields are filled");
       return;
     }
-    const nameInPersons = persons.find(
-      (p) => p.name.toLowerCase() === newName.toLowerCase()
-    );
-    if (nameInPersons) {
-      alert(`${newName} is already added to phonebook`);
-      return;
-    }
 
     const newPerson = {
       name: newName,
       number: newNumber,
     };
+
+    const personInPhoneBook = persons.find(
+      (p) => p.name.toLowerCase() === newPerson.name.toLowerCase()
+    );
+
+    if (personInPhoneBook) {
+      const confirmUpdate = window.confirm(
+        `${newPerson.name} is already added to phonebook, replace the old number with a new one`
+      );
+      if (confirmUpdate) {
+        phoneBookService
+          .updateEntry(personInPhoneBook.id, newPerson)
+          .then((updatedPerson) =>
+            setPersons((persons) =>
+              persons.map((person) =>
+                person.id !== updatedPerson.id ? person : updatedPerson
+              )
+            )
+          );
+        setNewName("");
+        setNewNumber("");
+      }
+      return;
+    }
 
     phoneBookService.createEntry(newPerson).then((person) => {
       setPersons((persons) => persons.concat(person));
