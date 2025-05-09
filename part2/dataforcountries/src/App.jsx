@@ -29,24 +29,29 @@ export default function App() {
   useEffect(
     function () {
       const controller = new AbortController();
+      const signal = controller.signal;
 
       async function findCountry() {
         try {
           const res = await fetch(
             "https://studies.cs.helsinki.fi/restcountries/api/all",
-            { signal: controller.signal }
+            { signal }
           );
           const data = await res.json();
 
           const filteredCountries = data.filter((country) =>
-            country.name.common.toLowerCase().includes(query.toLowerCase())
+            country.name.common
+              .toLowerCase()
+              .includes(debouncedQuery.toLowerCase())
           );
 
           if (filteredCountries.length > 10)
             throw new Error("Too many matches, specify another filter");
 
           if (filteredCountries.length === 0)
-            throw new Error(`No match found with the query '${query}'`);
+            throw new Error(
+              `No match found with the query '${debouncedQuery}'`
+            );
 
           if (filteredCountries.length === 1) {
             setResult(filteredCountries);
@@ -58,13 +63,15 @@ export default function App() {
           );
           setResult(countryNames);
         } catch (error) {
+          // To ignore signal was aborted without reason error when user types fast and query isn't debounced
+          // if (error.name === "AbortError") return;
           setError(error.message);
         } finally {
           setIsLoading(false);
         }
       }
 
-      if (debouncedQuery.length > 0) {
+      if (query.length > 0) {
         setResult(null);
         setIsLoading(true);
         setError("");
@@ -77,6 +84,10 @@ export default function App() {
     },
     [debouncedQuery]
   );
+
+  function showCountry(countryName) {
+    setQuery(countryName);
+  }
 
   return (
     <div>
@@ -93,7 +104,12 @@ export default function App() {
         {isLoading && <p>Loading...</p>}
         {error && <p>{error}</p>}
         {!isLoading && !error && result?.length > 1
-          ? result?.map((r) => <p key={r}>{r}</p>)
+          ? result?.map((r) => (
+              <div key={r}>
+                <span>{r}</span>{" "}
+                <button onClick={() => showCountry(r)}>Show</button>
+              </div>
+            ))
           : result?.length === 1 && (
               <>
                 <div>
