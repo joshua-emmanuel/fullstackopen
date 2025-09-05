@@ -2,7 +2,12 @@ import { useState, useEffect } from "react";
 import Country from "./Country";
 import CountryInfo from "./CountryInfo";
 
-export default function CountryList({ query, setQuery }) {
+export default function CountryList({
+  query,
+  setQuery,
+  selectedCountry,
+  setSelectedCountry,
+}) {
   const [countries, setCountries] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -25,7 +30,10 @@ export default function CountryList({ query, setQuery }) {
           const data = await res.json();
 
           const filteredCountries = data.filter((country) =>
-            country.name.common.toLowerCase().includes(query.toLowerCase())
+            selectedCountry
+              ? country.name.common.toLowerCase() ===
+                selectedCountry.toLowerCase()
+              : country.name.common.toLowerCase().includes(query.toLowerCase())
           );
 
           if (filteredCountries.length > 10)
@@ -45,14 +53,14 @@ export default function CountryList({ query, setQuery }) {
           setCountries(countryNames);
         } catch (error) {
           /**** To ignore signal was aborted without reason error when user types fast and query isn't debounced ****/
-          // if (error.name === "AbortError") return;
+          if (error.name === "AbortError") return;
           setError(error.message);
         } finally {
           setIsLoading(false);
         }
       }
 
-      if (query.length > 0) {
+      if (query.length > 0 || selectedCountry) {
         setCountries(null);
         setIsLoading(true);
         setError("");
@@ -63,11 +71,11 @@ export default function CountryList({ query, setQuery }) {
         controller.abort();
       };
     },
-    [query]
+    [query, selectedCountry]
   );
 
   function showCountry(countryName) {
-    setQuery(countryName);
+    setSelectedCountry(countryName);
   }
 
   return (

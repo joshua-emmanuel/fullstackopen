@@ -4,7 +4,7 @@ export default function Weather({ city }) {
   const [weather, setWeather] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const WEATHER_API_KEY = import.meta.env.VITE_API_KEY;
+  const WEATHER_API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
   const WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/weather";
 
   useEffect(function () {

@@ -6,12 +6,12 @@ function useDebouncedQuery(query, delay) {
 
   useEffect(
     function () {
-      const intervalId = setInterval(function () {
+      const timeoutId = setTimeout(function () {
         setDebouncedQuery(query);
       }, delay);
 
       return function () {
-        clearInterval(intervalId);
+        clearTimeout(timeoutId);
       };
     },
     [query, delay]
@@ -22,7 +22,13 @@ function useDebouncedQuery(query, delay) {
 
 export default function App() {
   const [query, setQuery] = useState("");
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const debouncedQuery = useDebouncedQuery(query, 1000);
+
+  function handleInputChange(e) {
+    setSelectedCountry(null);
+    setQuery(e.target.value);
+  }
 
   return (
     <div>
@@ -32,10 +38,15 @@ export default function App() {
           type="text"
           id="search"
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={handleInputChange}
         />
       </div>
-      <CountryList query={debouncedQuery} setQuery={setQuery} />
+      <CountryList
+        query={debouncedQuery}
+        setQuery={setQuery}
+        selectedCountry={selectedCountry}
+        setSelectedCountry={setSelectedCountry}
+      />
     </div>
   );
 }
