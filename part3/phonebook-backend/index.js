@@ -45,6 +45,15 @@ app.get("/api/persons/:id", (request, response) => {
   response.json(person);
 });
 
+app.delete("/api/persons/:id", (request, response) => {
+  const id = request.params.id;
+  const personIndex = persons.findIndex((person) => person.id === id);
+  const person = persons[personIndex];
+  if (!person) return response.status(404).json({ error: "person not found" });
+  persons.splice(personIndex, 1);
+  response.json(person);
+});
+
 const PORT = 3001;
 
 app.listen(PORT, () => console.log(`Server is running on PORT ${PORT}`));
